@@ -1,0 +1,146 @@
+npm init -y
+npm i express dotenv (crea web server- variables de entorno)
+https://www.google.com/search?q=npm+express&oq=npm+e&aqs=chrome.1.69i57j0i512l5j69i60l2.2026j0j7&sourceid=chrome&ie=UTF-8
+crear .env
+
+npm i cors (proteje superficialmente)
+
+tags git hub
+
+git tag -a v1.00 "fin seccion 8"
+git push --tags
+heroku git:remote -a restserver-curso-node-andreshu
+
+https://mongoosejs.com/
+npm i mongoose 
+
+para la encriptacion de contraseñas
+npm i bcryptjs
+
+para validaciones 
+npm i express-validator  (coleccion de midlewers)
+
+isEmpty(pregunta si esta vacio) 
+
+crear roles en mongodb colecciones nuevas 
+centralizar isrole
+no mostrar la _vv y el password
+
+//para optimizar las validaciones  si estan en el controlador
+hacerlo en los helpérs adecuarlo y luego importarlo a las rutas
+
+gi status para ver si hay algun commit pendiente en el CMD
+git add .
+git commit -m "example.env add"
+
+git rm .env --cached elimina del github
+variables de entorno heroku 
+heroku config :ver variables de entornod e heroku
+
+: establecer, esta en el process.env.nombre en el CMD
+heroku config:set MONGODB_CNN="mongodb+srv://user_node_cafe:4pW
+
+git push heroku main              enviar a heroku 
+
+
+para Borrar 
+heroku config:unset nombre
+
+deplegar en heroku 
+git push heroku main
+
+para ver los heroores CMD de heroku en las peticiones
+heroku logs -n 100 
+en vivo
+heroku logs -n 100 --tail
+
+para crear token primero en model/server
+luego crear en routes 
+crear auth en controlador 
+
+instalar paquete para jwt
+npm i jsonwebtoken
+se crea en los helpers
+
+validacion son el jwt para eliminar usuario lo haroa solo un admin
+generalmente slos jwt se envian en los headers
+
+obtenr informacion del usuario autenticado
+validar si no esiste el usuario o esta eliminado de la BD
+
+middleware: verificar rol de administrador
+middleware: verificar rol de definidos en las rutas
+
+para el deploid exportar del .env 
+
+16/02/2022 Login by Google chrome
+
+1. registro en google identity 
+https://developers.google.com/identity/gsi/web/guides/overview - https://console.developers.google.com/projectselector2/apis/dashboard?pli=1&supportedpurview=project
+
+2.colocar boton de google
+3. config backend
+4.npm install google-auth-library --save (para node)
+5. el helper crear google.ferify.js
+ 
+ "Se puede crear documentacion del backend en postman"
+
+2. Categorias 
+    Ruta-controller- model
+    server- constructor -rutas 
+    
+    primero crear en routes categorias.js
+    2do crear en los controllers categorias.js
+    3ro en el server,js crear la nueva rota de categorias 
+    4to rutear en postman
+    5to se crea el modelo categoria con un atributo que conecta a Usuario
+    6to optimizar importacione en un index.js en modelos
+    7mo poner los midlewers en las routes, los check importarlos 
+        y el midlewers validar campos para que bote el error si en caso no se cumpl el check
+        que viene de los validators
+    8vo crear en el controller la validacion si existe el nombre de la categoria 
+        generar data
+        crear categoria
+        guardar en DB
+        enviar msg por request
+    tener cuidado en validaciones con tipo mayuscula
+    ----------------------------------------------------------------------------------
+    Realizar Busquedas
+        1er crear ruta en models.server
+        2do en server routes debe tner mismo  nombre el archivo de routes and controller
+    --------------------------------------------------------------------------------------
+    CARGA DE ARCHIVOS
+         Ruta-controller- model
+        server- constructor -rutas 
+        instalar dependecia https://www.npmjs.com/package/express-fileupload
+        npm i express-fileupload
+        en el server colocar el nuevo  middleware de example de la pagina
+        validaciones y ruta de guardar archivo en el controller
+        crear carpeta de guardar los archivos en backend
+        ../uploads "apunta lugar donde esta el controler"
+        separar extensionesValidas
+        validar extension
+        para generar uids unicos de los archivos
+        instalar npm i uuid 
+        guardar en upload imagnes con uid unico
+        hepler mediante promesas y modificacion de nombre
+        crear carpetas de destino y tipos de archivoa a recibir
+        crear un put con middlewares y una forma nueva de middlewares
+        actualizar imagen de usuario
+        imposrtara los modelos y que tengan donde guardara las imgs
+        si se copia y pega significa que se puede optimizar
+        optimizar and save ultim image
+        importar path and fs para borrar archivos
+        retornar imagenes son res.senffile()
+        colocar en gitignore los uploads
+        instalar cloudinary 
+        npm i cloudinary
+        https://cloudinary.com/console/c-e8e126f5e1fec2b2c0497f57d6fe26
+        subir imagens o videos 
+        api envaoriment variable en variables de enmtoerno .ENV 
+        luego nuevo actualizar imagen con cloudinary
+        luego a heroku subir nueva variable de entorno CLOUDINARY_URL=
+        -----------------------------------------------
+        Certificación Let's Encrypt
+        npm install certbot
+        npm install -g certbot
