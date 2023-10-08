@@ -26,7 +26,7 @@ const PostSchema = Schema({
     },
     category: {
         type: Schema.Types.ObjectId,
-        ref: 'CategoryPost',
+        ref: 'PostCategory',
         required: true
     },    
 }, { timestamps: true } );

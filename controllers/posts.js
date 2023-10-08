@@ -51,7 +51,9 @@ const getPost = async ( req, res ) => {
 
     const { id } = req.params;
 
-    const post = await Post.findById( id ).populate( 'user', 'title' );
+    const post = await Post.findById( id )
+                    .populate( 'user', 'title' )
+                    .populate( 'category', 'category' );
 
     //Validacion de DB 
     // verificar si el id existe

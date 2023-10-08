@@ -32,7 +32,7 @@ router.post( '/:collection/:id', [
 
 // PUT - actualizar Archivo
 router.put( '/:collection/:id', [
-    validateJWT,
+    // validateJWT,
     check( 'id', 'It is not validate id' ).isMongoId(),
     check( 'collection').custom( c => allowedCollection( c, [ 'posts', 'products' ]) ),
     validateUploadFile,

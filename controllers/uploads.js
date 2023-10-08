@@ -97,9 +97,9 @@ const updateImage = async (req, res) => {
     }
 
     // Clean image previas
-    if (model.image) {
+    if (model.imageId) {
         // path of image
-        const pathImage = model.image; // Utiliza la ruta completa almacenada en model.image
+        const pathImage = model.imageId; // Utiliza la ruta completa almacenada en model.image
 
         // delete image server
         if (fs.existsSync(pathImage)) {
@@ -112,12 +112,12 @@ const updateImage = async (req, res) => {
     const nameImage = await uploadFile(req.files, undefined, collection);
     
     // Actualizar la propiedad 'image' del modelo con la nueva ruta completa
-    model.image = path.join(__dirname, '../uploads', collection, nameImage); // Almacena la ruta completa
+    model.imageId = path.join(__dirname, '../uploads', collection, nameImage); // Almacena la ruta completa
     
     // Guardar el modelo actualizado en la base de datos
     await model.save();
     
-    res.sendFile(model.image); // Envía la ruta completa
+    res.json( {image: nameImage} ); // Envía la ruta completa
 }
 
 
@@ -215,7 +215,6 @@ const showImage = async ( req, res ) => {
             return res.status( 500 ).json({ msg: 'I forgot to validate this type of post'} );
     }
                 
-    //Clean image previas
     if( model.imageId ) {
         // path of image
         const pathImage = path.join( __dirname, '../uploads', collection, model.imageId );

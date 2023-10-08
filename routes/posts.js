@@ -43,7 +43,6 @@ router.post( '/', [
 
 // GET all posts - paginado
 router.get( '/',[
-    validateJWT,
     validateFields,
     
 ], getPosts );
@@ -51,7 +50,6 @@ router.get( '/',[
 
 // GETpublicaciones por id
 router.get( '/:id', [
-    validateJWT,
     check( 'id', 'It is not valid id' ).isMongoId(),
     validateFields,
 
@@ -60,7 +58,6 @@ router.get( '/:id', [
 
 // GET publicaciones por categoria
 router.get( '/category/:category', [
-    validateJWT,
     check( 'category', 'The category is mandatory' ).not().isEmpty(),
     check('category').custom( isValidCategory ),
     validateFields,
