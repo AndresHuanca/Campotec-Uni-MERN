@@ -22,14 +22,6 @@ router.post( '/', [
 
 ], uploadFiles );
 
-//POST - carga de imagenes por publicacion
-router.post( '/:collection/:id', [
-    validateJWT,
-    validateUploadFile,
-
-], uploadImageByPost );
-// TODO:FALTA ARREGLAR ENDPOIND PARA QUE SEA PURO INGLES
-
 // PUT - actualizar Archivo
 router.put( '/:collection/:id', [
     // validateJWT,

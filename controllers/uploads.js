@@ -32,49 +32,6 @@ const uploadFiles = async( req, res = response ) => {
     
 };
 
-const uploadImageByPost = async( req, res ) => {
-
-    const { collection, id } = req.params;
-    
-    try {
-        // Validación de collection permitida
-        switch ( collection ) {
-            case 'posts': 
-                // Save Image 
-                const nameImage = await uploadFile( req.files, undefined, collection );
-                // console.log(nameImage)
-
-                // Extraer path de imagen guardada
-                const pathImage = path.join( __dirname, '../uploads', collection, nameImage );
-                // console.log(pathImage)
-                
-                // Guadar la ruta de la imagen en el atibuto image de la publicacion
-                const { image } = await Post.findById( id );
-                
-                if( image ) {
-
-                    const post = await Post.findByIdAndUpdate( id, { image: pathImage }, { new: true });
-                    res.sendFile( pathImage );
-    
-                    if ( !post  ) {
-                        // Si no se encontró la publicación, devuelve un mensaje de error
-                        return res.status(404).json({ msg: 'Post not found - Upload' });
-                    }
-            
-                }
-
-                break;
-                
-            default:
-                return res.status( 500 ).json({ msg: 'I forgot to validate this type of post'} );
-        }
-        
-    } catch ( msg ) {
-        res.status( 400 ).json({ msg });
-    }
-    
-};
-
 const updateImage = async (req, res) => {
     const { collection, id } = req.params;
 
@@ -95,29 +52,23 @@ const updateImage = async (req, res) => {
         default:
             return res.status(500).json({ msg: 'I forgot to validate this type of post' });
     }
-
     // Clean image previas
-    if (model.imageId) {
+    if ( model.imageId ) {
         // path of image
-        const pathImage = model.imageId; // Utiliza la ruta completa almacenada en model.image
-
+        const pathImage = path.join( __dirname, '../uploads', collection, model.imageId );
         // delete image server
-        if (fs.existsSync(pathImage)) {
-            fs.unlinkSync(pathImage);
-            console.log('Eliminó', model.image);
+        if( fs.existsSync( pathImage) ){
+            fs.unlinkSync( pathImage );
         }
-    } 
+    }
+    // Subir y crear archivo según seu coleccion automatica
+    const nameImageId = await uploadFile( req.files, undefined, collection );
+    model.imageId = nameImageId;
 
-    // Subir y crear archivo según su colección automáticamente
-    const nameImage = await uploadFile(req.files, undefined, collection);
-    
-    // Actualizar la propiedad 'image' del modelo con la nueva ruta completa
-    model.imageId = path.join(__dirname, '../uploads', collection, nameImage); // Almacena la ruta completa
-    
-    // Guardar el modelo actualizado en la base de datos
+    // guardar en DB
     await model.save();
-    
-    res.json( {image: nameImage} ); // Envía la ruta completa
+
+    res.json( { imageId: nameImageId} ); 
 }
 
 
@@ -192,7 +143,7 @@ const showImage = async ( req, res ) => {
     switch ( collection ) {
         case 'posts': 
             model = await Post.findById( id );
-            console.log(model)
+
             if( !model ) {
                 return res.status( 400 ).json({ 
                     msg: `No post found with that id: ${ id }`
@@ -242,5 +193,4 @@ module.exports = {
     updateImage,
     updateImageCloudinary,
     uploadFiles,
-    uploadImageByPost,
 };

@@ -11,7 +11,7 @@ const postPost = async( req, res = response ) => {
 
     // Busco el id de la categoria
     let { id } = await PostCategory.findOne( { category: categoryUpperCase } );
-    console.log(id)
+
     const data = {
         ...body,
         category: id,
