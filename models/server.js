@@ -2,6 +2,7 @@ const express = require('express');
 const cors = require('cors');
 const fileUpload = require('express-fileupload');
 require('express-async-errors');
+const path = require('path');
 
 
 const { dbConnection } = require('../database/config');
@@ -75,7 +76,7 @@ class Server {
         this.app.get('*', ( req, res ) => {
             res.sendFile(path.join(__dirname, 'public', 'index.html'));
         });
-        
+
         this.app.use((err, req, res, next) => {
             console.error(err);
             next(err);
