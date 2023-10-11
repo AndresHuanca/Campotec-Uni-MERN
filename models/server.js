@@ -1,6 +1,8 @@
 const express = require('express');
 const cors = require('cors');
 const fileUpload = require('express-fileupload');
+require('express-async-errors');
+
 
 const { dbConnection } = require('../database/config');
 
@@ -54,7 +56,7 @@ class Server {
         })); 
 
     };
-
+    
     //siguiente ruta(get- put- post- delete)
     routes() {
         
@@ -67,10 +69,17 @@ class Server {
         this.app.use(  this.paths.posts,          require('../routes/posts') );
         this.app.use(  this.paths.uploads,        require('../routes/uploads') );
         // Ruta de manejo de errores 404 (al final de todas las rutas existentes)
+        // this.app.get('*', ( req, res ) => {
+        //     res.sendFile(__dirname + '/public/index.html');
+        // });
         this.app.get('*', ( req, res ) => {
-            res.sendFile(__dirname + '/public/index.html');
+            res.sendFile(path.join(__dirname, 'public', 'index.html'));
         });
-
+        
+        this.app.use((err, req, res, next) => {
+            console.error(err);
+            next(err);
+        });
     };
 
     listen() {
