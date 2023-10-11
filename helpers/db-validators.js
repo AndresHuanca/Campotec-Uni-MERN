@@ -1,5 +1,5 @@
 //importando modelo usuario //importando modelo categoria
-const { Role, User, Post, PostCategory } = require('../models');
+const { Role, User, Post, PostCategory, AboutUs } = require('../models');
 
 //--------------------------------------USERS------------------------------------- 
 //verificar si el usuario existe
@@ -86,9 +86,8 @@ const categoryNameExists = async ( category = '' ) => {
     }
 
 };
-// ----------------------CATEGORY-----------------------------
+// ----------------------POST-----------------------------
 
-// Validaciones de BD de CATEGORIAS
 const postExistsdById = async ( id = '' ) => { 
     // verifficar si el id existe
     let postExists = await Post.findById( id );
@@ -97,7 +96,6 @@ const postExistsdById = async ( id = '' ) => {
         
     }
 };
-
 
 
 //-----------------------PUBLICACION----------------------------------- 
@@ -114,7 +112,6 @@ const nombreProductoExiste = async ( nombre = '' ) => {
 };
 
 
-
 // Validaciones de Carga de Archivos
 const allowedCollection =  ( collection = '', collections = [] ) => {
 
@@ -127,16 +124,35 @@ const allowedCollection =  ( collection = '', collections = [] ) => {
     return true;
 };
 
+//------------------------------ABOUTUS----------------------
+
+const aboutUsExistsdById = async ( id = '' ) => { 
+    // verifficar si el id existe
+    let aboutUsExists = await AboutUs.findById( id );
+    if( !aboutUsExists ) {
+        throw new Error( `The id: ${ id } not found`)
+        
+    }
+};
+
+
+
+
+
+
+
+
 module.exports = {
     allowedCollection,
     emailExists,
     isValidCategory,
     isValidRole,
     categoryExistsById,
-    postExistsdById,
+    aboutUsExistsdById,
     roleExistsById,
     userExistsById,
     categoryNameExists,
     nombreProductoExiste,
     rolNameExists,
+    postExistsdById,
 };

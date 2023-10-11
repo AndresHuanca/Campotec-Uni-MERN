@@ -53,7 +53,8 @@ const getPost = async ( req, res ) => {
 
     const post = await Post.findById( id )
                     .populate( 'user', 'title' )
-                    .populate( 'category', 'category' );
+                    .populate( 'category', 'category' )
+                    .sort( { createdAt: -1 } );
 
     //Validacion de DB 
     // verificar si el id existe
@@ -73,8 +74,6 @@ const getPost = async ( req, res ) => {
 };
 
 
-
-
 const getPostByCategory = async ( req, res = response ) => {
 
     const { category } = req.params;
@@ -89,7 +88,10 @@ const getPostByCategory = async ( req, res = response ) => {
     }
 
     const post = await Post.find({ category: id });
+                    // .sort( { createdAt: -1 } );
+        
     // console.log(publicacion)
+    // TODO:SI LA CATEGORIA ES NOVEDADES UTILIZAR .sort( { createdAt: -1 } );
     
     if ( !post ) {
         return res.status(404).json({ error: 'Post not found' });

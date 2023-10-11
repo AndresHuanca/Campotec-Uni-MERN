@@ -14,6 +14,7 @@ class Server {
         this.paths = {
             // buscar:         '/api/buscar',
             auth:           '/auth',
+            aboutus:        '/about-us',
             postcategories: '/postcategories',
             posts:          '/posts',
             roles:          '/roles',
@@ -58,6 +59,7 @@ class Server {
     routes() {
         
         this.app.use(  this.paths.auth,           require('../routes/auth') );
+        this.app.use(  this.paths.aboutus,           require('../routes/aboutus') );
         // this.app.use(  this.paths.buscar, require('../routes/buscar') );
         this.app.use(  this.paths.roles,          require('../routes/roles') );
         this.app.use(  this.paths.postcategories, require('../routes/postcategories') );
@@ -65,7 +67,7 @@ class Server {
         this.app.use(  this.paths.posts,          require('../routes/posts') );
         this.app.use(  this.paths.uploads,        require('../routes/uploads') );
         // Ruta de manejo de errores 404 (al final de todas las rutas existentes)
-        this.app.get('*', (req, res) => {
+        this.app.get('*', ( req, res ) => {
             res.sendFile(__dirname + '/public/index.html');
         });
 
@@ -74,7 +76,7 @@ class Server {
     listen() {
         
         this.app.listen( this.port, () => {
-        console.log('Rest-server Base Online', this.port );
+        console.log('Rest-server Campotec Uni Online', this.port );
         });
     }
 
