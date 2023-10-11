@@ -31,6 +31,11 @@ class Server {
         this.middlewares();
         //Rutas
         this.routes();
+        
+        this.app.get('*', ( req, res ) => {
+            res.sendFile(path.join(__dirname, 'public', '../public/index.html'));
+        });
+        
     };
 
     // DB
@@ -73,16 +78,14 @@ class Server {
         // this.app.get('*', ( req, res ) => {
         //     res.sendFile(__dirname + '/public/index.html');
         // });
-        this.app.get('*', ( req, res ) => {
-            res.sendFile(path.join(__dirname, 'public', '../public/index.html'));
-        });
-
+        
         this.app.use((err, req, res, next) => {
             console.error(err);
             next(err);
         });
     };
 
+    
     listen() {
         
         this.app.listen( this.port, () => {
