@@ -33,7 +33,7 @@ class Server {
         this.routes();
 
         this.app.get('*', ( req, res ) => {
-            res.sendFile(path.join(__dirname, 'public'+ '../public/index.html'));
+            res.sendFile(path.join(__dirname,'..', 'public', 'index.html'));
         });
         
     };
