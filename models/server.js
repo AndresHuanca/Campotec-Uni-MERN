@@ -17,7 +17,7 @@ class Server {
         this.paths = {
             // buscar:         '/api/buscar',
             auth:           '/auth',
-            aboutus:        '/about-us',
+            aboutus:        '/aboutus',
             postcategories: '/postcategories',
             posts:          '/posts',
             roles:          '/roles',
