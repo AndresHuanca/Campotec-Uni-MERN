@@ -74,7 +74,7 @@ class Server {
         //     res.sendFile(__dirname + '/public/index.html');
         // });
         this.app.get('*', ( req, res ) => {
-            res.sendFile(path.join(__dirname, 'public', 'index.html'));
+            res.sendFile(path.join(__dirname, 'public', '../public/index.html'));
         });
 
         this.app.use((err, req, res, next) => {
