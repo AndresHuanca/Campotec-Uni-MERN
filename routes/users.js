@@ -38,7 +38,7 @@ router.post('/', [
         check( 'email', 'The email is not valid' ).isEmail(), //validacion que sea email
         check( 'email' ).custom( emailExists ),
         // check( 'role', 'It is not a valid category' ).isIn( [ 'ADMIN_ROLE', 'USER_ROLE ' ] ), //definiendo los roles aceptados
-        check( 'role' ).custom( isValidRole ),
+        // check( 'role' ).custom( isValidRole ),
         validateFields,
 
 ], postUser );
