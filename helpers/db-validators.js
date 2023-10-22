@@ -1,5 +1,5 @@
 //importando modelo usuario //importando modelo categoria
-const { Role, User, Post, PostCategory, AboutUs } = require('../models');
+const { Role, User, Post, PostCategory, AboutUs, ProductCategories } = require('../models');
 
 //--------------------------------------USERS------------------------------------- 
 //verificar si el usuario existe
@@ -135,6 +135,29 @@ const aboutUsExistsdById = async ( id = '' ) => {
     }
 };
 
+//-------------------------------CATEGORIAPRODUCTO-----------------------------
+// Validación de Nombre unico de Categorias
+const productCategoryNameExists = async ( category = '' ) => {
+    // Convirtiendo a toUpperCase porque asi esta en la DB
+    category = category.toUpperCase();  
+    //verificar si el correo existe
+    let categoryExists = await ProductCategories.findOne( { category } );
+    
+    if( categoryExists ) {
+        throw new Error( `The category: ${ category } already exists` );
+    }
+
+};
+
+// Validaciones de BD de CATEGORIAS
+const productCategoryExistsById = async ( id = '' ) => { 
+    // verifficar si el id existe
+    let categoryExistsById = await ProductCategories.findById( id );
+    if( !categoryExistsById ) {
+        throw new Error( `The id: ${ id } not found`)
+        
+    }
+};
 
 
 
@@ -155,4 +178,6 @@ module.exports = {
     nombreProductoExiste,
     rolNameExists,
     postExistsdById,
+    productCategoryNameExists,
+    productCategoryExistsById,
 };

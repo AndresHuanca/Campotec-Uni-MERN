@@ -16,13 +16,15 @@ class Server {
 
         this.paths = {
             // buscar:         '/api/buscar',
-            auth:           '/auth',
-            aboutus:        '/aboutus',
-            postcategories: '/postcategories',
-            posts:          '/posts',
-            roles:          '/roles',
-            uploads:        '/uploads',
-            users:          '/users',
+            auth:              '/auth',
+            aboutus:           '/aboutus',
+            postcategories:    '/postcategories',
+            productcategories: '/product-categories',
+            products:          '/products',
+            posts:             '/posts',
+            roles:             '/roles',
+            uploads:           '/uploads',
+            users:             '/users',
         };
 
         // Conectar a base de datos
@@ -66,14 +68,16 @@ class Server {
     //siguiente ruta(get- put- post- delete)
     routes() {
         
-        this.app.use(  this.paths.auth,           require('../routes/auth') );
-        this.app.use(  this.paths.aboutus,           require('../routes/aboutus') );
+        this.app.use(  this.paths.auth,                require('../routes/auth') );
+        this.app.use(  this.paths.aboutus,             require('../routes/aboutus') );
         // this.app.use(  this.paths.buscar, require('../routes/buscar') );
-        this.app.use(  this.paths.roles,          require('../routes/roles') );
-        this.app.use(  this.paths.postcategories, require('../routes/postcategories') );
-        this.app.use(  this.paths.users,          require('../routes/users') );
-        this.app.use(  this.paths.posts,          require('../routes/posts') );
-        this.app.use(  this.paths.uploads,        require('../routes/uploads') );
+        this.app.use(  this.paths.roles,               require('../routes/roles') );
+        this.app.use(  this.paths.postcategories,      require('../routes/postcategories') );
+        this.app.use(  this.paths.productcategories,   require('../routes/product-categories') );
+        this.app.use(  this.paths.products,            require('../routes/products') );
+        this.app.use(  this.paths.users,               require('../routes/users') );
+        this.app.use(  this.paths.posts,               require('../routes/posts') );
+        this.app.use(  this.paths.uploads,             require('../routes/uploads') );
         // Ruta de manejo de errores 404 (al final de todas las rutas existentes)
         // this.app.get('*', ( req, res ) => {
         //     res.sendFile(__dirname + '/public/index.html');
