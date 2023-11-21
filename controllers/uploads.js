@@ -10,7 +10,7 @@ cloudinary.config( process.env.CLOUDINARY_URL);
 const { response } = require('express');
 const { uploadFile } = require('../helpers');
 // Import Models
-const { Post } = require('../models');
+const { Post, AboutUs, Products } = require('../models');
 
 
 const uploadFiles = async( req, res = response ) => {
@@ -32,6 +32,27 @@ const uploadFiles = async( req, res = response ) => {
     
 };
 
+const uploadFilesCloudinary = async (req, res) => {
+    const { collection } = req.params;
+
+
+    try {
+
+        // Extract data from req.files.archive
+        const { tempFilePath } = req.files.archive;
+
+        // Upload the new image to Cloudinary
+        const { secure_url } = await cloudinary.uploader.upload(tempFilePath, { folder: `RestServer NodeJs/${collection}` });
+
+        res.json({ urlImage: secure_url });
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ msg: 'Internal Server Error' });
+    }
+};
+
+
+
 const updateImage = async (req, res) => {
     const { collection, id } = req.params;
 
@@ -48,6 +69,15 @@ const updateImage = async (req, res) => {
             }
 
             break;
+        case 'aboutus':
+                model = await AboutUs.findById(id);
+                if (!model) {
+                    return res.status(400).json({ 
+                        msg: `No post found with that id${id}`
+                    });
+                }
+    
+                break;
 
         default:
             return res.status(500).json({ msg: 'I forgot to validate this type of post' });
@@ -73,65 +103,72 @@ const updateImage = async (req, res) => {
 
 
 // actualizar con cloudinary 
-const updateImageCloudinary = async( req, res ) => {
-
-    const { collection, id } = req.params;
+const updateImageCloudinary = async (req, res) => {
+    const { collection, id, fieldName } = req.params;
 
     let model;
-    
-    // Validar si existe id and name of colection  
-    switch ( collection ) {
-        case 'publications': 
+
+    // Validar si existe un ID y el nombre de la colección
+    switch (collection) {
+        case 'publications':
             model = await Post.findById( id );
-            if( !model ) {
-                return res.status( 400 ).json({ 
-                    msg: `No post found with that id: ${ id }`
+            if (!model) {
+                return res.status(400).json({
+                    msg: `No post found with that ID: ${ id }`
                 });
             }
-
             break;
 
-        // case 'products': 
-        //     model = await Products.findById( id );
-        //     if( !model ) {
-        //         return res.status( 400 ).json({ 
-        //             msg: `No products found with that id: ${ id }`
-        //         });
-        //     }
-            
-        //     break;
-    
+        case 'products':
+                model = await Products.findById( id );
+                if (!model) {
+                    return res.status(400).json({
+                        msg: `No post found with that ID: ${ id }`
+                    });
+                }
+                break;
+
+        case 'aboutus':
+            model = await AboutUs.findById( id );
+            if (!model) {
+                return res.status(400).json({
+                    msg: `No post found with that ID: ${ id }`
+                });
+            }
+            break;
+
         default:
-            return res.status( 500 ).json({ msg: 'I forgot to validate this type of post-cloudinary'} );
+            return res.status(500).json({ msg: 'I forgot to validate this type of post in Cloudinary' });
     }
-    
-    //Clean image previas
-    if( model.image ) {
-        // desustructurar
-        const nameArr = model.image.split('/');
-        const name = nameArr[ nameArr.length - 1 ];
-        const [ public_id ] = name.split('.');
-        cloudinary.uploader.destroy( public_id );
-    
-    } 
+
+    // Eliminar la imagen anterior en el campo fieldName (si existe)
+    if (model[fieldName]) {
+        // Extraer el public_id de la imagen anterior
+        const nameArr = model[fieldName].split('/');
+        const name = nameArr[nameArr.length - 1];
+        const [public_id] = name.split('.');
+
+        // Eliminar la imagen anterior de Cloudinary
+        await cloudinary.uploader.destroy(public_id);
+    }
 
     // extraer de req.files.archivo sus datos
     const { tempFilePath } = req.files.archive;
     // Dentro de tempFilePath existe secure_url
     // const { secure_url } = await cloudinary.uploader.upload( tempFilePath ); clase
-
+    
     const { secure_url } = await cloudinary.uploader.upload( tempFilePath,{ folder: `RestServer NodeJs/${ collection }`} );
 
-    // Asignar
-    model.image = secure_url;
+    // Asigna la nueva URL de imagen al campo específico en el modelo
+    model[fieldName] = secure_url;
 
     await model.save();
 
     res.json({
-        model       
+        secure_url
     });
-
 };
+
 
 // GET - Display image
 const showImage = async ( req, res ) => {
@@ -193,4 +230,5 @@ module.exports = {
     updateImage,
     updateImageCloudinary,
     uploadFiles,
+    uploadFilesCloudinary
 };

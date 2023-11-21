@@ -7,6 +7,8 @@ const User = require('./user');
 const AboutUs = require('./aboutus');
 const ProductCategories = require('./product-categories');
 const Products = require('./products');
+const ShoppingCart = require('./shopping-cart');
+
 
 
 
@@ -21,4 +23,5 @@ module.exports = {
     User,
     ProductCategories,
     Products,
+    ShoppingCart,
 };

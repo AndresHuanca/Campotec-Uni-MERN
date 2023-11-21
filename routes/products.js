@@ -5,74 +5,77 @@ const { check } = require('express-validator');
 
 //importando db-validators
 const { 
-        emailExists, 
-        userExistsById,
-        isValidRole,
+        productCategoryExistsById,
+        productExistsById,
 } = require('../helpers');
 
 
 //importando middleware
 const { 
-        hasRole,
-        isAdministratorRole,
         validateFields,
         validateJWT,
 } = require('../middlewares');
 
 const {  
-        deleteUser,
-        getUsers,
-        updateUser,
-        postUser,
-} = require('../controllers/users');
+        postProduct,
+        getProducts,
+        getProduct,
+        putProduct,
+        deleteProduct,
+} = require('../controllers/products');
 
 
 const router = Router();
 
 // POST  - middleware segundo argumento , crear errores
 router.post('/', [
+        validateJWT,
         //validaciones de los argumentos enviados en post
         check( 'name', 'The name is not valid' ).not().isEmpty(), //isEmpty(¿es vacio?)(no().isEmpty 'no es correo')
-        check( 'lastName', 'The last name is not valid' ).not().isEmpty(), 
-        check( 'password', 'The password must be more than 6 letters' ).isLength( { min: 6 } ), //tamaño mino de 6
-        check( 'email', 'The email is not valid' ).isEmail(), //validacion que sea email
-        check( 'email' ).custom( emailExists ),
-        // check( 'role', 'It is not a valid category' ).isIn( [ 'ADMIN_ROLE', 'USER_ROLE ' ] ), //definiendo los roles aceptados
-        // check( 'role' ).custom( isValidRole ),
+        check( 'description', 'The description is not valid' ).not().isEmpty(), 
+        check( 'price', 'The price is not valid' ).not().isEmpty(), 
+        check( 'image', 'The image is not valid' ).not().isEmpty(), 
+        check( 'availability', 'The availability is not valid' ).not().isEmpty(), 
+        check( 'category', 'The category is not valid' ).not().isEmpty(), 
+        check( 'category', 'It is not a valid id' ).isMongoId(),
+        check( 'category' ).custom( productCategoryExistsById ),
         validateFields,
 
-], postUser );
+], postProduct );
 // Tener en cuenta para crear un usuario administrador con JWT (escalable)
 
-// GET
+// GET All
 router.get('/', [
-        validateJWT,
+        // validateJWT,
         validateFields,
-], getUsers );
+], getProducts );
+
+// GET pruct 
+router.get( '/:id', [
+        check( 'id', 'It is not a valid id' ).isMongoId(),
+        check( 'id' ).custom( productExistsById ),
+        validateFields,
+
+], getProduct );
 
 // PUT
 router.put('/:id',[
         validateJWT,
         check( 'id', 'It is not a valid id' ).isMongoId(),
-        check( 'id' ).custom( userExistsById ),
-        check( 'role' ).custom( isValidRole ),
-        check( 'email' ).custom( emailExists ),
+        check( 'id' ).custom( productExistsById ),
+        check( 'name', 'It is not a valid name' ).not().isEmpty(),
         validateFields,
 
-], updateUser );
-// UserExistsById
-// existeUsuarioPorId
+], putProduct );
+
 
 // DELETE
 router.delete('/:id', [
         validateJWT,
-        isAdministratorRole,
-        hasRole( 'ADMIN_ROLE', 'VENTAS_ROLE', 'USER_ROLE'),
         check( 'id', 'No es un Id  Valido' ).isMongoId(),
-        check( 'id' ).custom( userExistsById ),
+        check( 'id' ).custom( productExistsById ),
         validateFields,
 
-], deleteUser );
-// TODO:hasRole is a example for futures proyects
+], deleteProduct );
 
 module.exports = router;

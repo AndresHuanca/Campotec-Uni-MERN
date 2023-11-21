@@ -23,18 +23,23 @@ const ProductSchema = Schema({
         type: String, 
     },
     availability: { 
-        type: String, 
+        type: Number, 
     },
-    user: {
+    review: {
+        // Reseñas
         type: Schema.Types.ObjectId,
-        ref: 'User',
-        required: true
+        ref: 'Review',
     },
     category: {
         type: Schema.Types.ObjectId,
         ref: 'ProductCategories',
         required: true
-    },    
+    },
+    user: {
+        type: Schema.Types.ObjectId,
+        ref: 'User',
+        required: true
+    }    
 }, { timestamps: true } );
 
 //sobreescribir funcion toJSON para no enviar el password y el _vv y el _id en el postman
@@ -50,4 +55,4 @@ ProductSchema.methods.toJSON = function() {
 
 };
 // tercer argumento para modificar nombre en base de datos sin s
-module.exports = model( 'Product', ProductSchema, 'product');
+module.exports = model( 'Product', ProductSchema, 'products');

@@ -1,5 +1,5 @@
 //importando modelo usuario //importando modelo categoria
-const { Role, User, Post, PostCategory, AboutUs, ProductCategories } = require('../models');
+const { Role, User, Post, PostCategory, AboutUs, ProductCategories, Products, ShoppingCart } = require('../models');
 
 //--------------------------------------USERS------------------------------------- 
 //verificar si el usuario existe
@@ -159,6 +159,34 @@ const productCategoryExistsById = async ( id = '' ) => {
     }
 };
 
+// -----------------------------PRODUCTOS----------------------------------------------------------------
+//verificar si el producto existe
+const productExistsById = async ( id = '' ) => {  
+    let productExists = await Products.findById( id );
+    if( !productExists ) {
+        throw new Error( `The product's id: ${ id } does not exist in the database` );
+    }
+
+};
+
+// ----------------------------SHOPPINGCART------------------------------------------------------------
+//verificar si el CARRITO existe por suId
+const shoppingCartExistsById = async ( id = '' ) => {  
+    let shoppingCartExists = await ShoppingCart.findById( id );
+    if( !shoppingCartExists ) {
+        throw new Error( `The shoppingCart id: ${ id } does not exist in the database` );
+    }
+
+};
+
+//verificar si el CARRITO existe por Id de User
+const shoppingCartExistsByIdUser = async ( id = '' ) => {  
+    let shoppingCartExists = await ShoppingCart.findOne({ user: id });
+    if( !shoppingCartExists ) {
+        throw new Error( `The shoppingCart id: ${ id } does not exist in the database` );
+    }
+
+};
 
 
 
@@ -180,4 +208,7 @@ module.exports = {
     postExistsdById,
     productCategoryNameExists,
     productCategoryExistsById,
+    productExistsById,
+    shoppingCartExistsById,
+    shoppingCartExistsByIdUser
 };

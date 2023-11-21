@@ -7,7 +7,8 @@ const {
     updateImage,
     showImage,
     updateImageCloudinary,
-    uploadImageByPost
+    uploadImageByPost,
+    uploadFilesCloudinary
 } = require('../controllers/uploads');
 
 const { allowedCollection } = require('../helpers');
@@ -22,16 +23,24 @@ router.post( '/', [
 
 ], uploadFiles );
 
+//POST - carga de archivos cloudinary
+router.post( '/:collection', [
+    validateJWT,
+    check( 'collection').custom( c => allowedCollection( c, [ 'posts', 'products', 'aboutus' ]) ),
+    validateUploadFile,
+
+], uploadFilesCloudinary );
+
 // PUT - actualizar Archivo
-router.put( '/:collection/:id', [
+router.put( '/:collection/:id/:fieldName', [
     // validateJWT,
     check( 'id', 'It is not validate id' ).isMongoId(),
-    check( 'collection').custom( c => allowedCollection( c, [ 'posts', 'products' ]) ),
+    check( 'collection').custom( c => allowedCollection( c, [ 'posts', 'products', 'aboutus' ]) ),
     validateUploadFile,
     validateFields,
 
-], updateImage );
-// ], updateImageCloudinary );
+], updateImageCloudinary );
+// ], updateImage );
 // TODO:updateImage HAY 2, EN CONTROLLER POST AND UPLOAD
 
 // GET - Display Image

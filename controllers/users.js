@@ -5,6 +5,7 @@ const bcryptjs = require('bcryptjs');
 
 // Importando modelo usuario
 const { User } = require('../models');
+const eventEmitt = require('../events/event-handling');
 
 
 // POST
@@ -14,12 +15,12 @@ const postUser = async( req , res = response ) => {
     const { name, lastName, email, password, role } = req.body;
 
     // Validación de que no se puede crear  Asuario administrador(OJO)
-    // if( role === 'ADMIN_ROLE' ) {
-    //     return res.status(400).json({
-    //         msg: 'The request could not be completed due to forbidden data',
-    //     });
+    if( role === 'ADMIN_ROLE' ) {
+        return res.status(400).json({
+            msg: 'The request could not be completed due to forbidden data',
+        });
         
-    // }
+    }
     // TODO:SOLO SE PUEDE CREAR USUARIOS ADMINS MEDIANTE BACKEND
 
     const roleUppercase = role.toUpperCase();
@@ -34,9 +35,11 @@ const postUser = async( req , res = response ) => {
     //guardar en DB
     await user.save();
 
-    res.json({
-        user
-    });
+    return user;
+    // return res.json({
+        
+    //     user
+    // });
 
 };
 
@@ -113,11 +116,12 @@ const deleteUser = async( req, res ) => {
     // muestra usuario autenticado
     // const usuarioAuntenticado = req.usuario;
 
-    res.json({
-        user
-        // usuarioAuntenticado,
-        // uid
-    });
+    return user;
+    // res.json({
+    //     user
+    //     // usuarioAuntenticado,
+    //     // uid
+    // });
 
 };
 

@@ -25,11 +25,13 @@ const {
         updateUser,
         postUser,
 } = require('../controllers/users');
+const { createUser, createUserService, deleteUserService } = require('../services/user-service');
 
 
 const router = Router();
 
 // POST  - middleware segundo argumento , crear errores
+// Implementado con servicios
 router.post('/', [
         //validaciones de los argumentos enviados en post
         check( 'name', 'The name is not valid' ).not().isEmpty(), //isEmpty(¿es vacio?)(no().isEmpty 'no es correo')
@@ -41,7 +43,7 @@ router.post('/', [
         // check( 'role' ).custom( isValidRole ),
         validateFields,
 
-], postUser );
+], createUserService );
 // Tener en cuenta para crear un usuario administrador con JWT (escalable)
 
 // GET
@@ -72,7 +74,7 @@ router.delete('/:id', [
         check( 'id' ).custom( userExistsById ),
         validateFields,
 
-], deleteUser );
+], deleteUserService );
 // TODO:hasRole is a example for futures proyects
 
 module.exports = router;
